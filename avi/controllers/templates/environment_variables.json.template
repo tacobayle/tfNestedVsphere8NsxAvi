@@ -1,0 +1,4 @@
+{
+  "vcenter_password": "${vcenter_password}",
+  "avi_password": "${avi_password}"
+}

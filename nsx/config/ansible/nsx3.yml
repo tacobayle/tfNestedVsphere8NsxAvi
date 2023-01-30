@@ -1,0 +1,80 @@
+---
+- hosts: localhost
+  gather_facts: no
+  collections:
+    - vmware.ansible_for_nsxt
+
+  # ansible-galaxy collection install git+https://github.com/vmware/ansible-for-nsxt.git,master
+
+  tasks:
+
+
+    - name: Store vCenter Session ID for later use
+      set_fact:
+        auth_vCenter: "administrator@{{ vcenter.sso.domain_name}}:{{ lookup('env', 'TF_VAR_vcenter_password') }}"
+
+#    - name: debug base 64 auth
+#      debug:
+#        msg: "{{ auth_vCenter | b64encode }}"
+
+    - name: Authenticate to vCenter to obtain a Session ID
+      ansible.builtin.uri:
+        url: "https://{{ vcenter.name }}.{{ external_gw.bind.domain }}/api/session"
+        method: POST
+        validate_certs: no
+        timeout: 10
+        headers:
+          Authorization: "Basic {{ auth_vCenter | b64encode }}"
+        body_format: json
+        return_content: yes
+        status_code: 201
+      register: vcenter_auth_result
+
+    - name: Store vCenter Session ID for later use
+      set_fact:
+        vCenter_SessionID: "{{ vcenter_auth_result.json }}"
+
+#    - name: debug vCenter sessionID
+#      debug:
+#        msg: "{{ vCenter_SessionID }}"
+
+    - name: Get the vSphere Cluster's Object ID (MoREF)
+      ansible.builtin.uri:
+        url: "https://{{ vcenter.name }}.{{ external_gw.bind.domain }}/rest/vcenter/cluster?filter.names={{ vcenter.cluster }}"
+        headers: "{ 'vmware-api-session-id':'{{ vCenter_SessionID }}' }"
+        method: GET
+        validate_certs: no
+        timeout: 10
+        body_format: json
+        return_content: yes
+        status_code: 200
+      register: cluster_info
+
+#    - name: debug outer loop item
+#      debug:
+#        msg: "{{ cluster_info }}"
+
+    - name: Store vSphere Cluster Object ID (MoREF) for later use
+      ansible.builtin.set_fact:
+        Cluster_ID: "{{ cluster_info.json.value[0].cluster | default(None) }}"
+
+    - name: Get ESXi hosts in vSphere Cluster
+      ansible.builtin.uri:
+        url: "https://{{ vcenter.name }}.{{ external_gw.bind.domain }}/rest/vcenter/host?filter.clusters={{ Cluster_ID }}"
+        headers: "{ 'vmware-api-session-id':'{{ vCenter_SessionID }}' }"
+        method: GET
+        validate_certs: no
+        timeout: 10
+        body_format: json
+        return_content: yes
+        status_code: 200
+      register: cluster_hosts
+
+    - name: Create list containing just the FQDN EdgeHosts
+      ansible.builtin.set_fact:
+        EdgeHosts: "{{ EdgeHosts | default([]) + [ item.name ] }}"
+      loop: "{{ cluster_hosts.json.value }}"
+
+#    - name: debug the list of EdgeHosts
+#      debug:
+#        msg: "{{ EdgeHosts }}"

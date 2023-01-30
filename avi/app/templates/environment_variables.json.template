@@ -1,0 +1,8 @@
+{
+  "vcenter_password": "${vcenter_password}",
+  "avi_password": "${avi_password}",
+  "docker_registry_username": "${docker_registry_username}",
+  "docker_registry_password": "${docker_registry_password}",
+  "ubuntu_password": "${ubuntu_password}",
+  "nsx_password": "${nsx_password}"
+}

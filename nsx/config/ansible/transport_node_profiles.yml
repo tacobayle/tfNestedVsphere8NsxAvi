@@ -1,0 +1,62 @@
+---
+- name: debug outer loop item
+  debug:
+    msg: "{{ outer_item }}"
+
+- name: initialize the variable host_switches
+  set_fact:
+    host_switches: []    
+
+#- name: initialize the variable transport_zone_endpoints
+#  set_fact:
+#    transport_zone_endpoints: []
+#
+#- name: initialize the variable uplinks
+#  set_fact:
+#    uplinks: []
+#
+#- name: build the variable uplinks
+#  set_fact:
+#    uplinks: "{{ uplinks | default([]) + [{'uplink_name': item.uplink_name, 'vds_uplink_name': item.vds_uplink_name }] }}"
+#  loop: "{{ outer_item.switch.uplinks }}"
+
+#- name: build the variable transport_zone_endpoints
+#  set_fact:
+#    transport_zone_endpoints: "{{ transport_zone_endpoints | default([]) + [{'transport_zone_name': item}] }}"
+#  loop: "{{ outer_item.switch.transport_zones }}"
+
+- name: build the variable host_switches (for host switch overlay)
+  set_fact:
+    host_switches: "{{ host_switches | default([]) + [{'host_switch_profiles': [{'name': item.uplink_profile_name, 'type': 'UplinkHostSwitchProfile'}], 'host_switch_name': item.name, 'host_switch_mode': item.mode, 'host_switch_type': item.type, 'uplinks': item.uplinks, 'ip_assignment_spec': {'resource_type': 'StaticIpPoolSpec', 'ip_pool_name': item.ip_pool_name}, 'transport_zone_endpoints': item.transport_zones}] }}"
+  loop: "{{ outer_item.switches }}"
+  when:
+    - item.ip_pool_name is defined
+
+- name: debug host_switches
+  debug:
+    msg: "{{ host_switches }}"
+
+- name: build the variable host_switches (for host switch external)
+  set_fact:
+    host_switches: "{{ host_switches | default([]) + [{'host_switch_profiles': [{'name': item.uplink_profile_name, 'type': 'UplinkHostSwitchProfile'}], 'host_switch_name': item.name, 'host_switch_mode': item.mode, 'host_switch_type': item.type, 'uplinks': item.uplinks, 'transport_zone_endpoints': item.transport_zones}] }}"
+  loop: "{{ outer_item.switches }}"
+  when:
+    - item.ip_pool_name is not defined
+
+- name: debug host_switches
+  debug:
+    msg: "{{ host_switches }}"
+
+- name: Create transport node profile
+  nsxt_transport_node_profiles:
+    hostname: "{{ vcenter.vds.portgroup.management.nsx_ip }}"
+    username: "admin"
+    password: "{{ lookup('env', 'TF_VAR_nsx_password') }}"
+    validate_certs: no
+    resource_type: "StandardHostSwitchSpec"
+    display_name: "{{ outer_item.name }}"
+    description: "{{ outer_item.description }}"
+    host_switch_spec:
+      resource_type: "StandardHostSwitchSpec"
+      host_switches: "{{ host_switches }}"
+    state: "present"

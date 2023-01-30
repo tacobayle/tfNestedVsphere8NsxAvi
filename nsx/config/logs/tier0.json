@@ -1,0 +1,36 @@
+{
+  "results" : [ {
+    "transit_subnets" : [ "100.64.0.0/16" ],
+    "internal_transit_subnets" : [ "169.254.0.0/24" ],
+    "ha_mode" : "ACTIVE_ACTIVE",
+    "failover_mode" : "NON_PREEMPTIVE",
+    "ipv6_profile_paths" : [ "/infra/ipv6-ndra-profiles/default", "/infra/ipv6-dad-profiles/default" ],
+    "force_whitelisting" : false,
+    "default_rule_logging" : false,
+    "disable_firewall" : false,
+    "advanced_config" : {
+      "forwarding_up_timer" : 0,
+      "connectivity" : "ON"
+    },
+    "resource_type" : "Tier0",
+    "id" : "tier0",
+    "display_name" : "tier0",
+    "path" : "/infra/tier-0s/tier0",
+    "relative_path" : "tier0",
+    "parent_path" : "/infra",
+    "unique_id" : "44d1f5d6-5704-4983-94dc-b50fb03c590a",
+    "realization_id" : "44d1f5d6-5704-4983-94dc-b50fb03c590a",
+    "marked_for_delete" : false,
+    "overridden" : false,
+    "_create_time" : 1645110371525,
+    "_create_user" : "admin",
+    "_last_modified_time" : 1645110371525,
+    "_last_modified_user" : "admin",
+    "_system_owned" : false,
+    "_protection" : "NOT_PROTECTED",
+    "_revision" : 0
+  } ],
+  "result_count" : 1,
+  "sort_by" : "display_name",
+  "sort_ascending" : true
+}

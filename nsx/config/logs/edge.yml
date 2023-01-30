@@ -1,0 +1,90 @@
+---
+host_switch_spec:
+  host_switches:
+    - host_switch_name: switch_overlay
+      host_switch_id: 9120dd18-2a9f-4ac9-a807-48c6921e5ff3
+      host_switch_type: NVDS
+      host_switch_mode: STANDARD
+      host_switch_profile_ids:
+        - key: UplinkHostSwitchProfile
+          value: 57cac2ea-e0d7-48db-bfd2-13683046715f
+      pnics:
+        - device_name: fp-eth0
+          uplink_name: uplink2
+      is_migrate_pnics: false
+      ip_assignment_spec:
+        ip_pool_id: 7f07f628-7ff1-4b04-8c03-0be45972a3ac
+        resource_type: StaticIpPoolSpec
+      cpu_config: []
+      transport_zone_endpoints:
+        - transport_zone_id: 9ae8dd04-f435-4e90-afb2-97715368ef23
+          transport_zone_profile_ids:
+            - resource_type: BfdHealthMonitoringProfile
+              profile_id: 52035bb3-ab02-4a08-9884-18631312e50a
+        - transport_zone_id: 7edfa14b-d5ab-41e4-ae02-2eefd94613e3
+          transport_zone_profile_ids:
+            - resource_type: BfdHealthMonitoringProfile
+              profile_id: 52035bb3-ab02-4a08-9884-18631312e50a
+      pnics_uninstall_migration: []
+      vmk_uninstall_migration: []
+      not_ready: false
+    - host_switch_name: switch_external
+      host_switch_id: 7c4110e3-60af-4d0f-af60-ac18995415e7
+      host_switch_type: NVDS
+      host_switch_mode: STANDARD
+      host_switch_profile_ids:
+        - key: UplinkHostSwitchProfile
+          value: c1494dc3-1060-4b1d-b056-83ac509739d6
+      pnics:
+        - device_name: fp-eth1
+          uplink_name: uplink1
+      is_migrate_pnics: false
+      ip_assignment_spec:
+        resource_type: AssignedByDhcp
+      cpu_config: []
+      transport_zone_endpoints:
+        - transport_zone_id: ae663758-b518-4f3b-a6c1-8407a0750d40
+          transport_zone_profile_ids:
+            - resource_type: BfdHealthMonitoringProfile
+              profile_id: 52035bb3-ab02-4a08-9884-18631312e50a
+      pnics_uninstall_migration: []
+      vmk_uninstall_migration: []
+      not_ready: false
+  resource_type: StandardHostSwitchSpec
+maintenance_mode: DISABLED
+node_deployment_info:
+  deployment_type: VIRTUAL_MACHINE
+  deployment_config:
+    vm_deployment_config:
+      vc_id: 325fc76e-89e8-4804-b772-fb56de0e0134
+      compute_id: resgroup-9
+      storage_id: datastore-15
+      management_network_id: dvportgroup-26
+      management_port_subnets:
+        - ip_addresses:
+            - 100.100.100.100
+          prefix_length: 24
+      default_gateway_addresses:
+        - 100.100.100.1
+      data_network_ids:
+        - "/infra/segments/test"
+        - "/infra/segments/test"
+      reservation_info:
+        memory_reservation:
+          reservation_percentage: 100
+        cpu_reservation:
+          reservation_in_shares: HIGH_PRIORITY
+          reservation_in_mhz: 0
+      resource_allocation:
+        cpu_count: 4
+        memory_allocation_in_mb: 8192
+      placement_type: VsphereDeploymentConfig
+    form_factor: MEDIUM
+    node_user_settings:
+      cli_username: admin
+      root_password: Admin!23Admin
+      cli_password: Admin!23Admin
+  node_settings:
+    hostname: edge1.mydomain.com
+    enable_ssh: true
+    allow_ssh_root_login: true

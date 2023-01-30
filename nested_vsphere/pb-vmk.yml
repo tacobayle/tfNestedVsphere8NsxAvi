@@ -1,0 +1,72 @@
+- hosts: localhost
+  tasks:
+
+    - name: Migrate vmk1 (VMotion) to the VDS
+      community.vmware.vmware_migrate_vmk:
+        hostname: "{{ vcenter.name }}.{{ external_gw.bind.domain}}"
+        username: "administrator@{{ vcenter.sso.domain_name }}"
+        password: "{{ lookup('env', 'TF_VAR_vcenter_password') }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi.basename }}{{ my_idx + 1 }}.{{ external_gw.bind.domain }}"
+        device: 'vmk1'
+        current_switch_name: 'vSwitch1'
+        current_portgroup_name: 'VMotion Network'
+        migrate_switch_name: "{{ vcenter.vds.basename }}-1-VMotion"
+        migrate_portgroup_name: "{{ vcenter.vds.portgroup.VMotion.name }}"
+      loop: "{{ vcenter.vds.portgroup.management.esxi_ips }}"
+      loop_control:
+        index_var: my_idx
+
+    - name: Migrate vmk2 (VSAN) to the VDS
+      community.vmware.vmware_migrate_vmk:
+        hostname: "{{ vcenter.name }}.{{ external_gw.bind.domain}}"
+        username: "administrator@{{ vcenter.sso.domain_name }}"
+        password: "{{ lookup('env', 'TF_VAR_vcenter_password') }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi.basename }}{{ my_idx + 1 }}.{{ external_gw.bind.domain }}"
+        device: 'vmk2'
+        current_switch_name: 'vSwitch2'
+        current_portgroup_name: 'VSAN Network'
+        migrate_switch_name: "{{ vcenter.vds.basename }}-2-VSAN"
+        migrate_portgroup_name: "{{ vcenter.vds.portgroup.VSAN.name }}"
+      loop: "{{ vcenter.vds.portgroup.management.esxi_ips }}"
+      loop_control:
+        index_var: my_idx
+
+    - name: Add Management vmkernel port using static network type for vmk3
+      community.vmware.vmware_vmkernel:
+        hostname: "{{ vcenter.name }}.{{ external_gw.bind.domain}}"
+        username: "administrator@{{ vcenter.sso.domain_name }}"
+        password: "{{ lookup('env', 'TF_VAR_vcenter_password') }}"
+        validate_certs: false
+        device: vmk3
+        esxi_hostname: "{{ esxi.basename }}{{ my_idx + 1 }}.{{ external_gw.bind.domain }}"
+        dvswitch_name: "{{ vcenter.vds.basename }}-0"
+        portgroup_name: "{{ vcenter.vds.portgroup.management.name }}-vmk"
+        network:
+          type: 'static'
+          ip_address: "{{ item.1 }}"
+          subnet_mask: "{{ vcenter.vds.portgroup.management.netmask }}"
+        state: present
+        enable_mgmt: True
+      loop: "{{ vcenter.vds.portgroup.management.esxi_ips | zip(vcenter.vds.portgroup.management.esxi_ips_temp) | list }}"
+      loop_control:
+        index_var: my_idx
+
+    - name: Add Management vmkernel port using static network type for vmk4
+      community.vmware.vmware_vmkernel:
+        hostname: "{{ vcenter.name }}.{{ external_gw.bind.domain}}"
+        username: "administrator@{{ vcenter.sso.domain_name }}"
+        password: "{{ lookup('env', 'TF_VAR_vcenter_password') }}"
+        validate_certs: false
+        device: vmk4
+        esxi_hostname: "{{ esxi.basename }}{{ my_idx + 1 }}.{{ external_gw.bind.domain }}"
+        dvswitch_name: "{{ vcenter.vds.basename }}-0"
+        portgroup_name: "{{ vcenter.vds.portgroup.management.name }}-vmk"
+        network:
+          type: 'dhcp'
+        state: present
+        enable_mgmt: True
+      loop: "{{ vcenter.vds.portgroup.management.esxi_ips }}"
+      loop_control:
+        index_var: my_idx

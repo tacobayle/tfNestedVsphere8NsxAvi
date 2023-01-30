@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  gather_facts: no
+  collections:
+    - vmware.ansible_for_nsxt
+
+  # ansible-galaxy collection install git+https://github.com/vmware/ansible-for-nsxt.git,master
+
+  tasks:
+    - name: Loop over multiple tasks - Transport zone profiles
+      include_tasks: transport_node_profiles.yml
+      loop: "{{ nsx.config.transport_node_profiles }}"
+      loop_control:
+        loop_var: outer_item

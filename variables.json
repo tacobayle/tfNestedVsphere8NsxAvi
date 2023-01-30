@@ -1,0 +1,656 @@
+{
+  "vcenter_underlay": {
+    "dc": "sof2-01-vc08",
+    "cluster": "sof2-01-vc08c01",
+    "datastore": "sof2-01-vc08c01-vsan",
+    "resource_pool": "sof2-01-vc08c01/Resources",
+    "folder": "nic-vSphere8-NSX-Avi",
+    "server": "sof2-01-vc08.oc.vmware.com",
+    "cl": {
+      "name": "ubuntu",
+      "ubuntu_focal_file_path": "/home/ubuntu/bin/focal-server-cloudimg-amd64.ova"
+    },
+    "networks": {
+      "management": {
+        "name": "vxw-dvs-34-virtualwire-3-sid-1080002-sof2-01-vc08-avi-mgmt"
+      },
+      "vmotion": {
+        "name": "vxw-dvs-34-virtualwire-120-sid-1080119-sof2-01-vc08-avi-dev116"
+      },
+      "vsan": {
+        "name": "vxw-dvs-34-virtualwire-119-sid-1080118-sof2-01-vc08-avi-dev115"
+      }
+    },
+    "network_nsx_external": {
+      "name": "vxw-dvs-34-virtualwire-124-sid-1080123-sof2-01-vc08-avi-dev120"
+      },
+    "network_nsx_overlay": {
+      "name": "vxw-dvs-34-virtualwire-125-sid-1080124-sof2-01-vc08-avi-dev121"
+      },
+    "network_nsx_overlay_edge": {
+      "name": "vxw-dvs-34-virtualwire-126-sid-1080125-sof2-01-vc08-avi-dev122"
+      }
+    },
+  "external_gw": {
+    "name": "external-gw8",
+    "cpu": 2,
+    "memory": 4096,
+    "disk": 20,
+    "public_key_path": "/home/ubuntu/.ssh/cloudKey.pub",
+    "private_key_path": "/home/ubuntu/.ssh/cloudKey",
+    "wait_for_guest_net_timeout": 2,
+    "username": "ubuntu",
+    "ansible_version": "2.10.7",
+    "avi_sdk_version": "22.1.2",
+    "netplanFile": "/etc/netplan/50-cloud-init.yaml",
+    "bind": {
+      "keyName": "myKeyName",
+      "forwarders": ["10.23.108.1", "10.23.108.2", "10.16.142.111"],
+      "domain": "avi123.com"
+    },
+    "ntp": "time.vmware.com"
+  },
+  "esxi": {
+    "count": 3,
+    "iso_source_location": "/home/ubuntu/bin/VMware-VMvisor-Installer-8.0-20513097.x86_64.iso",
+    "iso_location": "/tmp/esxi",
+    "boot_cfg_location": "efi/boot/boot.cfg",
+    "boot_cfg_lines": ["kernelopt=runweasel ks=cdrom:/KS_CUST.CFG"],
+    "bios": "efi",
+    "guest_id": "vmkernel65Guest",
+    "keyboard_type": "US Default",
+    "basename": "esxi-0",
+    "cpu": 24,
+    "memory": 131072,
+    "disks": [
+      {
+        "size": 32,
+        "label": "disk0",
+        "unit_number": 0,
+        "thin_provisioned": true
+      },
+      {
+        "size": 64,
+        "label": "disk1",
+        "unit_number": 1,
+        "thin_provisioned": true
+      },
+      {
+        "size": 448,
+        "label": "disk2",
+        "unit_number": 2,
+        "thin_provisioned": true
+      }
+    ],
+    "wait_for_guest_net_timeout": 0,
+    "nested_hv_enabled": "true"
+  },
+  "vcenter": {
+    "iso_source_location": "/home/ubuntu/bin/VMware-VCSA-all-8.0.0-20519528.iso",
+    "json_config_file": "vcsa-cli-installer/templates/install/vCSA_with_cluster_on_ESXi.json",
+    "timezone": "Europe/Paris",
+    "datacenter": "dc1",
+    "cluster": "cluster1",
+    "cache_disk": "mpx.vmhba0:C0:T1:L0",
+    "capacity_disk": "mpx.vmhba0:C0:T2:L0",
+    "enable_vsan_esa": false,
+    "thin_disk_mode": true,
+    "deployment_option": "small",
+    "name": "vcsa-01",
+    "ssh_enable": true,
+    "sso": {
+      "domain_name": "domain.local"
+    },
+    "ceip_enabled": false,
+    "vds" : {
+      "basename": "vds",
+      "mtu": 1500,
+      "discovery_protocol": "lldp",
+      "version": "7.0.2",
+      "portgroup": {
+        "management": {
+          "name": "management",
+          "netmask": "255.255.252.0",
+          "prefix": "22",
+          "gateway": "10.41.132.1",
+          "esxi_ips": ["10.41.134.171", "10.41.134.172", "10.41.134.173"],
+          "esxi_ips_temp": ["10.41.134.176", "10.41.134.177", "10.41.134.178"],
+          "vcenter_ip": "10.41.134.175",
+          "external_gw_ip": "10.41.134.170",
+          "nsx_ip": "10.41.134.176",
+          "nsx_edge": ["10.41.134.178", "10.41.134.179"]
+        },
+        "VMotion": {
+          "name": "VMotion",
+          "esxi_ips": ["100.64.133.31", "100.64.133.32", "100.64.133.33"],
+          "netmask": "255.255.255.0",
+          "prefix": "24"
+        },
+        "VSAN": {
+          "name": "VSAN",
+          "esxi_ips": ["100.64.132.31", "100.64.132.32", "100.64.132.33"],
+          "netmask": "255.255.255.0",
+          "prefix": "24"
+        },
+        "nsx_overlay": {
+          "name": "nsx-overlay-vds",
+          "max_mtu": 1700
+        },
+        "nsx_overlay_edge": {
+          "name": "nsx-overlay-edge-vds",
+          "max_mtu": 1700
+        },
+        "nsx_external": {
+          "name": "nsx-external-vds",
+          "max_mtu": 1700,
+          "netmask": "255.255.255.0",
+          "prefix": "24",
+          "external_gw_ip": "172.16.130.100",
+          "tier0_vips": ["172.16.130.110"],
+          "tier0_ips": ["172.16.130.111", "172.16.130.112"]
+        }
+      }
+    }
+  },
+  "nsx": {
+    "networks": {
+      "create": true
+    },
+    "content_library": {
+      "create": true,
+      "ova_location": "/home/ubuntu/bin/nsx-unified-appliance-4.0.1.1.0.20598732.ova"
+    },
+    "manager" : {
+      "create": true,
+      "deployment": "Medium",
+      "basename": "nsx-manager",
+      "role": "NSX Manager"
+    },
+    "config": {
+      "create": true,
+      "ip_pools": [
+        {
+          "name": "ip_pool_tep_tn",
+          "cidr": "10.8.11.32/27",
+          "gateway": "10.8.11.33",
+          "start": "10.8.11.34",
+          "end": "10.8.11.62"
+        },
+        {
+          "name": "ip_pool_tep_edge",
+          "cidr": "10.8.11.64/27",
+          "gateway": "10.8.11.65",
+          "start": "10.8.11.66",
+          "end": "10.8.11.94"
+        }
+      ],
+      "uplink_profiles": [
+        {
+          "name": "uplink-profile-default",
+          "mtu": 1700,
+          "transport_vlan": 0,
+          "teaming": {
+            "policy": "FAILOVER_ORDER",
+            "active_list": [
+              {
+                "uplink_name": "uplink-1",
+                "uplink_type": "PNIC"
+              }
+            ]
+          }
+        }
+      ],
+      "transport_zones": [
+        {
+          "name": "tz_overlay",
+          "type": "OVERLAY"
+        },
+        {
+          "name": "tz_vlan",
+          "type": "VLAN"
+        }
+      ],
+      "segments": [
+        {
+          "name": "segment-external",
+          "vlan": "0",
+          "transport_zone": "tz_vlan",
+          "description": "Segment configured for tier0 external connectivity"
+        }
+      ],
+      "transport_node_profiles": [
+        {
+          "name": "tnp-cluster",
+          "description": "descr1",
+          "switches": [
+            {
+              "name": "nsx-overlay-vds",
+              "mode": "STANDARD",
+              "type": "VDS",
+              "uplink_profile_name": "uplink-profile-default",
+              "ip_pool_name": "ip_pool_tep_tn",
+              "uplinks": [
+                {
+                  "uplink_name": "uplink-1",
+                  "vds_uplink_name": "uplink1"
+                }
+              ],
+              "transport_zones": [ { "transport_zone_name": "tz_overlay" } ]
+            }
+          ]
+        }
+      ],
+      "edge_node":
+      {
+        "basename": "edge-0",
+        "cpu": 4,
+        "memory": 8192,
+        "disk": 200,
+        "data_network": "segment2",
+        "host_switch_spec": {
+          "host_switches" : [
+            {
+              "host_switch_name": "nsxHostSwitch_overlay",
+              "host_switch_type": "NVDS",
+              "host_switch_mode": "STANDARD",
+              "host_switch_profile_names": ["uplink-profile-default"],
+              "pnics": [
+                {
+                  "device_name": "fp-eth0",
+                  "uplink_name": "uplink-1"
+                }
+              ],
+              "ip_pool_name": "ip_pool_tep_edge",
+              "transport_zone_names": ["tz_overlay"]
+            },
+            {
+              "host_switch_name": "nsxHostSwitch_external",
+              "host_switch_type": "NVDS",
+              "host_switch_mode": "STANDARD",
+              "host_switch_profile_names": ["uplink-profile-default"],
+              "pnics": [
+                {
+                  "device_name": "fp-eth1",
+                  "uplink_name": "uplink-1"
+                }
+              ],
+              "transport_zone_names": ["tz_vlan"]
+            }
+          ]
+        }
+      },
+      "edge_clusters":
+      [
+        {
+          "display_name": "my-edge-cluster-01",
+          "members_name": [
+            "edge-01",
+            "edge-02"
+          ]
+        }
+      ],
+      "tier0s":
+      [
+        {
+          "display_name": "my-tier0",
+          "ha_mode" : "ACTIVE_STANDBY",
+          "edge_cluster_name": "my-edge-cluster-01",
+          "interfaces" :
+          [
+            {
+              "edge_name": "edge-01",
+              "segment_name": "segment-external",
+              "type" : "EXTERNAL",
+              "display_name" : "if-ext-0",
+              "description": "this will consume IP defines in .vcenter.vds.portgroup.nsx_external.tier0_ips"
+            },
+            {
+              "edge_name": "edge-02",
+              "segment_name": "segment-external",
+              "type" : "EXTERNAL",
+              "display_name" : "if-ext-1",
+              "description": "this will consume IP defines in .vcenter.vds.portgroup.nsx_external.tier0_ips"
+            }
+          ],
+          "static_routes":
+          [
+            {
+              "display_name" : "default-route",
+              "network" : "0.0.0.0/0",
+              "next_hops" : [ { "ip_address": "172.16.130.100" } ]
+            }
+          ],
+          "ha_vips":
+          [
+            {
+              "interfaces" : ["if-ext-0", "if-ext-1"],
+              "description": "this will consume IP defines in .vcenter.vds.portgroup.nsx_external.tier0_vips"
+            }
+          ]
+        }
+      ],
+      "tier1s":
+      [
+        {
+          "tier0": "my-tier0",
+          "display_name": "my-tier1-A",
+          "route_advertisement_types": ["TIER1_STATIC_ROUTES", "TIER1_CONNECTED", "TIER1_LB_VIP"]
+        },
+        {
+          "tier0": "my-tier0",
+          "display_name": "my-tier1-B",
+          "route_advertisement_types": ["TIER1_STATIC_ROUTES", "TIER1_CONNECTED", "TIER1_LB_VIP"]
+        }
+      ],
+      "segments_overlay":
+      [
+        {
+          "display_name": "my-segment-mgmt",
+          "tier1": "my-tier1-A",
+          "transport_zone": "tz_overlay",
+          "cidr": "100.100.11.0/24",
+          "gw": "1",
+          "avi_controller": "11",
+          "description": ""
+        },
+        {
+          "display_name": "my-segment-server-1",
+          "tier1": "my-tier1-A",
+          "transport_zone": "tz_overlay",
+          "cidr": "100.100.21.0/24",
+          "gw": "1",
+          "description": "keep the segment server 1 at the second position in the segment_overlay list - do not remove",
+          "avi_app_server_ips": ["11", "12", "13"]
+        },
+        {
+          "display_name": "my-segment-server-2",
+          "tier1": "my-tier1-A",
+          "transport_zone": "tz_overlay",
+          "cidr": "100.100.22.0/24",
+          "gw": "1",
+          "description": "keep the segment server 2 at the second position in the segment_overlay list - do not remove"
+        },
+        {
+          "display_name": "my-segment-vip-1",
+          "tier1": "my-tier1-A",
+          "transport_zone": "tz_overlay",
+          "cidr": "100.100.31.0/24",
+          "gw": "1",
+          "description": "keep the vip segment 1 at the fourth position in the segment_overlay list - do not remove"
+        },
+        {
+          "display_name": "my-segment-vip-2",
+          "tier1": "my-tier1-B",
+          "transport_zone": "tz_overlay",
+          "cidr": "100.100.32.0/24",
+          "gw": "1",
+          "description": "keep the vip segment 2 at the fifth position in the segment_overlay list - do not remove"
+        }
+      ]
+    }
+  },
+  "avi": {
+    "content_library": {
+      "ova_location": "/home/ubuntu/bin/controller-22.1.2-9086.ova"
+    },
+    "controller": {
+      "create": true,
+      "cpu": 8,
+      "memory": 24768,
+      "disk": 128,
+      "basename": "avi-controller",
+      "version": "22.1.2",
+      "network_ref": "my-segment-mgmt"
+    },
+    "config": {
+      "create": true,
+      "avi_config_repo": "https://github.com/tacobayle/ansibleAviConfig",
+      "avi_config_tag": "v1.32",
+      "transport_zone_name": "tz_overlay",
+      "content_library_avi": "avi_cloud_nsx",
+      "cloud": {
+        "name": "dc1_nsxt",
+        "obj_name_prefix": "AVICTRL",
+        "network_management": {
+          "name": "my-segment-mgmt",
+          "avi_ipam_pool_se": "100.100.11.210-100.100.11.230",
+          "description": "the following keys are required: name, avi_ipam_pool_se"
+        },
+        "networks_data": [
+          {
+            "name": "my-segment-vip-1",
+            "avi_ipam_pool_se": "100.100.31.210-100.100.31.230",
+            "description": "the following keys are required: name, avi_ipam_pool_se and avi_ipam_vip",
+            "avi_ipam_vip": {
+              "cidr": "100.100.131.0/24",
+              "pool": "100.100.131.210-100.100.131.230"
+            }
+          },
+          {
+            "name": "my-segment-vip-2",
+            "avi_ipam_pool_se": "100.100.32.210-100.100.32.230",
+            "description": "the following keys are required: name, avi_ipam_pool_se and avi_ipam_vip",
+            "avi_ipam_vip": {
+              "cidr": "100.100.132.0/24",
+              "pool": "100.100.132.210-100.100.132.230"
+            }
+          }
+        ]
+      },
+      "service_engine_groups": [
+        {
+          "name": "Default-Group",
+          "ha_mode": "HA_MODE_SHARED_PAIR",
+          "min_scaleout_per_vs": 2,
+          "buffer_se": 0,
+          "extra_shared_config_memory": 0,
+          "vcenter_folder": "Avi-SE-Default-Group",
+          "vcpus_per_se": 1,
+          "memory_per_se": 1024,
+          "disk_per_se": 25,
+          "realtime_se_metrics": {
+            "enabled": true,
+            "duration": 0
+          }
+        },
+        {
+          "name": "seGroupCpuAutoScale",
+          "ha_mode": "HA_MODE_SHARED",
+          "min_scaleout_per_vs": 1,
+          "max_scaleout_per_vs": 2,
+          "max_cpu_usage": 70,
+          "buffer_se": 0,
+          "extra_shared_config_memory": 0,
+          "vcenter_folder": "Avi-SE-Autoscale",
+          "vcpus_per_se": 1,
+          "memory_per_se": 1024,
+          "disk_per_se": 25,
+          "auto_rebalance": true,
+          "auto_rebalance_interval": 30,
+          "auto_rebalance_criteria": [
+            "SE_AUTO_REBALANCE_CPU"
+          ],
+          "realtime_se_metrics": {
+            "enabled": true,
+            "duration": 0
+          }
+        },
+        {
+          "name": "seGroupGslb",
+          "ha_mode": "HA_MODE_SHARED",
+          "min_scaleout_per_vs": 1,
+          "buffer_se": 0,
+          "extra_shared_config_memory": 0,
+          "vcenter_folder": "Avi-SE-GSLB",
+          "vcpus_per_se": 1,
+          "memory_per_se": 1024,
+          "disk_per_se": 25,
+          "realtime_se_metrics": {
+            "enabled": true,
+            "duration": 0
+          }
+        }
+      ],
+      "pools": [
+        {
+          "name": "pool1-hello-nsxt",
+          "tier1": "my-tier1-A",
+          "lb_algorithm": "LB_ALGORITHM_ROUND_ROBIN",
+          "default_server_port": 80,
+          "type": "ip-based",
+          "avi_app_server_ips": ["100.100.21.11", "100.100.21.12", "100.100.21.13"]
+        },
+        {
+          "name": "pool2-avi-nsxt",
+          "tier1": "my-tier1-A",
+          "application_persistence_profile_ref": "System-Persistence-Client-IP",
+          "default_server_port": 8080,
+          "type": "ip-based",
+          "avi_app_server_ips": ["100.100.21.11", "100.100.21.12", "100.100.21.13"]
+        },
+        {
+          "name": "pool3-waf",
+          "tier1": "my-tier1-A",
+          "application_persistence_profile_ref": "System-Persistence-Client-IP",
+          "default_server_port": 8081,
+          "type": "ip-based",
+          "avi_app_server_ips": ["100.100.21.11", "100.100.21.12", "100.100.21.13"]
+        },
+        {
+          "name": "avi-app-nsx-group",
+          "tier1": "my-tier1-A",
+          "default_server_port": 80,
+          "type": "nsx-group-based"
+        }
+      ],
+      "virtual_services": {
+        "http": [
+          {
+            "name": "app1-hello-world-nsxt",
+            "network_ref": "my-segment-vip-1",
+            "pool_ref": "pool1-hello-nsxt",
+            "se_group_ref": "Default-Group",
+            "services": [
+              {
+                "port": 80,
+                "enable_ssl": "false"
+              },
+              {
+                "port": 443,
+                "enable_ssl": "true"
+              }
+            ]
+          },
+          {
+            "name": "app2-avi-nsxt",
+            "network_ref": "my-segment-vip-1",
+            "pool_ref": "pool2-avi-nsxt",
+            "se_group_ref": "Default-Group",
+            "services": [
+              {
+                "port": 80,
+                "enable_ssl": "false"
+              },
+              {
+                "port": 443,
+                "enable_ssl": "true"
+              }
+            ]
+          },
+          {
+            "name": "app3-waf",
+            "network_ref": "my-segment-vip-1",
+            "pool_ref": "pool3-waf",
+            "se_group_ref": "Default-Group",
+            "services": [
+              {
+                "port": 80,
+                "enable_ssl": "false"
+              },
+              {
+                "port": 443,
+                "enable_ssl": "true"
+              }
+            ]
+          },
+          {
+            "name": "app4-se-cpu-auto-scale",
+            "network_ref": "my-segment-vip-1",
+            "pool_ref": "pool1-hello-nsxt",
+            "services": [
+              {
+                "port": 80,
+                "enable_ssl": "false"
+              },
+              {
+                "port": 443,
+                "enable_ssl": "true"
+              }
+            ],
+            "se_group_ref": "seGroupCpuAutoScale"
+          },
+          {
+            "name": "app5-hello-world-nsxt-group",
+            "network_ref": "my-segment-vip-1",
+            "pool_ref": "avi-app-nsx-group",
+            "se_group_ref": "Default-Group",
+            "services": [
+              {
+                "port": 80,
+                "enable_ssl": "false"
+              },
+              {
+                "port": 443,
+                "enable_ssl": "true"
+              }
+            ]
+          }
+        ],
+        "dns": [
+          {
+            "name": "app6-dns",
+            "network_ref": "my-segment-vip-2",
+            "se_group_ref": "Default-Group",
+            "services": [
+              {
+                "port": 53
+              }
+            ]
+          },
+          {
+            "name": "app7-gslb",
+            "network_ref": "my-segment-vip-2",
+            "services": [
+              {
+                "port": 53
+              }
+            ],
+            "se_group_ref": "seGroupGslb"
+          }
+        ]
+      }
+    },
+    "app": {
+      "create": true,
+      "basename": "avi-app-0",
+      "description": "it will deploy server(s) in the NSX-T segment mentioned above in avi.app.network_ref. The amount of servers is based on the amount of IPs defined in the specific nsx.config.segments_overlay[*].avi_app_server_ips",
+      "ova_location": "/home/ubuntu/bin/focal-server-cloudimg-amd64.ova",
+      "cpu": 4,
+      "memory": 8192,
+      "disk": 32,
+      "public_key_path": "/home/ubuntu/.ssh/cloudKey.pub",
+      "private_key_path": "/home/ubuntu/.ssh/cloudKey",
+      "username": "ubuntu",
+      "netplan_file": "/etc/netplan/50-cloud-init.yaml",
+      "mtu": 1300,
+      "nsxt_vm_tags": "avi-app-tag",
+      "nsxt_group_name": "avi-app-nsx-group",
+      "avi_app_docker_image": "tacobayle/avi_app",
+      "hello_world_app_tcp_port": "80",
+      "avi_app_tcp_port": "8080",
+      "hackazon_docker_image": "mutzel/all-in-one-hackazon:postinstall",
+      "hackazon_tcp_port": "8081",
+      "network_ref": "my-segment-server-1"
+    }
+  }
+}

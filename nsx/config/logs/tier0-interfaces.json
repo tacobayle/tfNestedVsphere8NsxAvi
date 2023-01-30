@@ -1,0 +1,66 @@
+{
+  "results" : [ {
+    "urpf_mode" : "STRICT",
+    "edge_path" : "/infra/sites/default/enforcement-points/default/edge-clusters/ce4e729d-61ca-4933-80d1-2683595dac3a/edge-nodes/0",
+    "segment_path" : "/infra/segments/uplink_tier0",
+    "type" : "EXTERNAL",
+    "multicast" : {
+      "enabled" : false,
+      "hello_interval" : 30
+    },
+    "resource_type" : "Tier0Interface",
+    "id" : "uplink",
+    "display_name" : "uplink",
+    "path" : "/infra/tier-0s/tier0/locale-services/default/interfaces/uplink",
+    "relative_path" : "uplink",
+    "parent_path" : "/infra/tier-0s/tier0/locale-services/default",
+    "unique_id" : "3bae4903-40fd-4c5e-ba4f-dd7054c8e62b",
+    "realization_id" : "3bae4903-40fd-4c5e-ba4f-dd7054c8e62b",
+    "marked_for_delete" : false,
+    "overridden" : false,
+    "subnets" : [ {
+      "ip_addresses" : [ "172.16.100.100" ],
+      "prefix_len" : 24
+    } ],
+    "_create_time" : 1645110751526,
+    "_create_user" : "admin",
+    "_last_modified_time" : 1645110751526,
+    "_last_modified_user" : "admin",
+    "_system_owned" : false,
+    "_protection" : "NOT_PROTECTED",
+    "_revision" : 0
+  }, {
+    "urpf_mode" : "STRICT",
+    "edge_path" : "/infra/sites/default/enforcement-points/default/edge-clusters/ce4e729d-61ca-4933-80d1-2683595dac3a/edge-nodes/1",
+    "segment_path" : "/infra/segments/uplink_tier0",
+    "type" : "EXTERNAL",
+    "multicast" : {
+      "enabled" : false,
+      "hello_interval" : 30
+    },
+    "resource_type" : "Tier0Interface",
+    "id" : "uplinkedge2",
+    "display_name" : "uplinkedge2",
+    "path" : "/infra/tier-0s/tier0/locale-services/default/interfaces/uplinkedge2",
+    "relative_path" : "uplinkedge2",
+    "parent_path" : "/infra/tier-0s/tier0/locale-services/default",
+    "unique_id" : "f820b953-142e-49cc-aab6-fcf5fe3f30a8",
+    "realization_id" : "f820b953-142e-49cc-aab6-fcf5fe3f30a8",
+    "marked_for_delete" : false,
+    "overridden" : false,
+    "subnets" : [ {
+      "ip_addresses" : [ "172.16.100.101" ],
+      "prefix_len" : 24
+    } ],
+    "_create_time" : 1645111314513,
+    "_create_user" : "admin",
+    "_last_modified_time" : 1645111314513,
+    "_last_modified_user" : "admin",
+    "_system_owned" : false,
+    "_protection" : "NOT_PROTECTED",
+    "_revision" : 0
+  } ],
+  "result_count" : 2,
+  "sort_by" : "display_name",
+  "sort_ascending" : true
+}

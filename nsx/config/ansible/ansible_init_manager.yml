@@ -1,0 +1,67 @@
+---
+- hosts: localhost
+  gather_facts: no
+  collections:
+    - vmware.ansible_for_nsxt
+
+# ansible-galaxy collection install git+https://github.com/vmware/ansible-for-nsxt.git,master
+# pip3 instal pyvmomi
+
+  tasks:
+
+    - name: Install NSX-T License
+      nsxt_licenses:
+        hostname: "{{ vcenter.vds.portgroup.management.nsx_ip }}"
+        username: "admin"
+        password: "{{ lookup('env', 'TF_VAR_nsx_password') }}"
+        validate_certs: no
+        license_key: "{{ lookup('env', 'TF_VAR_nsx_license') }}"
+        state: present
+      ignore_errors: yes  # If license in already in use or not applicable, it will result in 'failure', so need to ensure we continue by ignoring the error
+      no_log: true
+
+    - name: Create a Hostswitch Profiles
+      nsxt_uplink_profiles:
+        hostname: "{{ vcenter.vds.portgroup.management.nsx_ip }}"
+        username: "admin"
+        password: "{{ lookup('env', 'TF_VAR_nsx_password') }}"
+        validate_certs: False
+        display_name: "{{ item.name }}"
+#        mtu: "{{ item.mtu }}" - does not work if uplink_profile is reused in a transport node profile connected to a vds.
+        resource_type: "UplinkHostSwitchProfile"
+        teaming:
+          active_list: "{{ item.teaming.active_list }}"
+          policy: "{{ item.teaming.policy }}"
+        transport_vlan: "{{ item.transport_vlan }}"
+        state: "present"
+      loop: "{{ nsx.config.uplink_profiles}}"
+
+
+    - name: Create transport zones for OVERLAY
+      nsxt_transport_zones:
+        hostname: "{{ vcenter.vds.portgroup.management.nsx_ip }}"
+        username: "admin"
+        password: "{{ lookup('env', 'TF_VAR_nsx_password') }}"
+        validate_certs: False
+        nested_nsx: "{{ item.nested | default(omit) }}"
+        resource_type: "TransportZone"
+        display_name: "{{ item.name }}"
+        transport_type: "{{ item.type }}"
+        state: "present"
+      loop: "{{ nsx.config.transport_zones}}"
+      when:
+        - item.type == "OVERLAY"
+
+    - name: Create transport zones for VLAN
+      nsxt_transport_zones:
+        hostname: "{{ vcenter.vds.portgroup.management.nsx_ip }}"
+        username: "admin"
+        password: "{{ lookup('env', 'TF_VAR_nsx_password') }}"
+        validate_certs: False
+        resource_type: "TransportZone"
+        display_name: "{{ item.name }}"
+        transport_type: "{{ item.type }}"
+        state: "present"
+      loop: "{{ nsx.config.transport_zones}}"
+      when:
+        - item.type == "VLAN"

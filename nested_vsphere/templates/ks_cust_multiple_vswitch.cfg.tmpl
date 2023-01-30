@@ -1,0 +1,79 @@
+# Accept VMware License agreement
+accepteula
+
+# Set root password
+rootpw ${esxi_root_password}
+
+# Install ESXi on the first disk, ignore any SSD and do not create a VMFS
+install --ignoressd --firstdisk --overwritevmfs
+
+# Set serial at install
+# serialnum --esx=xxxx
+
+# Set the keyboard
+keyboard '${keyboard_type}'
+
+# Set the network to DHCP on the first network adapter
+network --bootproto=static --device=vmnic3 --ip=${ip_mgmt} --netmask=${netmask} --nameserver=${nameserver} --hostname=${hostname} --gateway=${gateway}
+
+# reboot the host after installation is completed
+reboot
+
+%firstboot --interpreter=busybox
+
+# enable & start remote ESXi Shell  (SSH)
+vim-cmd hostsvc/enable_ssh
+vim-cmd hostsvc/start_ssh
+
+# Suppress ESXi Shell warning
+esxcli system settings advanced set -o /UserVars/SuppressShellWarning -i 1
+
+# To mark as flash disk
+esxcli system settings advanced set -o /Disk/AllowUsbClaimedAsSSD -i 1
+
+# Network config
+esxcli network ip interface remove --interface-name=vmk0
+esxcli network ip interface add --interface-name=vmk0 --portgroup-name="Management Network"
+esxcli network ip interface ipv4 set --interface-name=vmk0 --ipv4=${ip_mgmt} --netmask=${netmask} --type=static
+esxcli network ip interface tag add -i vmk0 -t Management
+esxcli network ip route ipv4 add -g ${gateway} -n 0.0.0.0/0
+# Adds a tag on a given VMkernel network interface. Supported tags are: Management, VMotion, faultToleranceLogging, vSphereReplication, vSphereReplicationNFC, vSphereProvisioning, VSAN, VSANWitness, vSphereBackupNFC, PrecisionTimeProtocol, VSANReplication
+#
+esxcli network vswitch standard add -v vSwitch1
+esxcli network vswitch standard uplink add -u vmnic4 -v vSwitch1
+esxcli network ip netstack add --netstack vmotion
+esxcli network vswitch standard portgroup add -p "VMotion Network" -v "vSwitch1"
+esxcli network ip interface add --interface-name=vmk1 --portgroup-name="VMotion Network" --netstack vmotion
+esxcli network ip interface ipv4 set --interface-name=vmk1 --ipv4=${ip_vmotion} --netmask=${netmask_vmotion} --type=static
+# esxcli network ip interface tag add -i vmk1 -t VMotion
+# Error message: "Failed to add VMotion tag when dedicated stack is instantiated"
+# esxcli network ip route ipv4 add --netstack vmotion -n 0.0.0.0/0 -g 10.8.1.1
+#
+esxcli network vswitch standard add -v vSwitch2
+esxcli network vswitch standard uplink add -u vmnic5 -v vSwitch2
+esxcli network vswitch standard portgroup add -p "VSAN Network" -v "vSwitch2"
+esxcli network ip interface add --interface-name=vmk2 --portgroup-name="VSAN Network"
+esxcli network ip interface ipv4 set --interface-name=vmk2 --ipv4=${ip_vsan} --netmask=${netmask_vsan} --type=static
+esxcli network ip interface tag add -i vmk2 -t VSAN
+
+# Other config
+# This settings should set (to be validated) NTP service startup policy to: "Start and stop with host"
+esxcli system ntp set --server ${ntp} --enabled true
+# Direct Console User Interface (DCUI) idle time before DCUI is automatically logged out
+esxcli system settings advanced set -o /UserVars/DcuiTimeOut -i 7200
+# ESXiShellInteractiveTimeOut idle time before an interactive shell is automatically logged out
+esxcli system settings advanced set -o /UserVars/ESXiShellInteractiveTimeOut -i 7200
+# Host Client CEIP opt-in state (2 for no)
+esxcli system settings advanced set -o /UserVars/HostClientCEIPOptIn -i 2
+# Default console to use when clicking on a VM screen shot in Host Client
+esxcli system settings advanced set -o /UserVars/HostClientDefaultConsole -s vmrc
+# Whether or not to enable MOTD notification on login for Host Client
+esxcli system settings advanced set -o /UserVars/HostClientEnableMOTDNotification -i 0
+# Whether or not to enable visual effects for Host Client
+esxcli system settings advanced set -o /UserVars/HostClientEnableVisualEffects -i 1
+# Default timeout for Host Client sessions in seconds
+esxcli system settings advanced set -o /UserVars/HostClientSessionTimeout -i 7200
+# Whether or not to show only recent objects in Host Client
+esxcli system settings advanced set -o /UserVars/HostClientShowOnlyRecentObjects -i 0
+# Suppress ESXi Hyperthread warning
+esxcli system settings advanced set -o /UserVars/SuppressHyperthreadWarning -i 1

@@ -1,0 +1,185 @@
+{
+  "results": [
+    {
+      "type": "DISCONNECTED",
+      "vlan_ids": [
+        "0"
+      ],
+      "transport_zone_path": "/infra/sites/default/enforcement-points/default/transport-zones/7edfa14b-d5ab-41e4-ae02-2eefd94613e3",
+      "advanced_config": {
+        "hybrid": false,
+        "multicast": true,
+        "inter_router": false,
+        "local_egress": false,
+        "urpf_mode": "STRICT",
+        "connectivity": "ON"
+      },
+      "admin_state": "UP",
+      "replication_mode": "MTEP",
+      "resource_type": "Segment",
+      "id": "258dac0b-88f3-41ae-82c2-94b1c4835ecf",
+      "display_name": "segment2",
+      "description": "Segment configured as Trunk, used for NSX Edge Nodes external connectivity",
+      "tags": [],
+      "path": "/infra/segments/258dac0b-88f3-41ae-82c2-94b1c4835ecf",
+      "relative_path": "258dac0b-88f3-41ae-82c2-94b1c4835ecf",
+      "parent_path": "/infra",
+      "unique_id": "c57b944c-cde3-4203-8a84-7d96df745bff",
+      "realization_id": "c57b944c-cde3-4203-8a84-7d96df745bff",
+      "marked_for_delete": false,
+      "overridden": false,
+      "_create_time": 1642968447376,
+      "_create_user": "admin",
+      "_last_modified_time": 1642968447376,
+      "_last_modified_user": "admin",
+      "_system_owned": false,
+      "_protection": "NOT_PROTECTED",
+      "_revision": 0
+    },
+    {
+      "type": "DISCONNECTED",
+      "vlan_ids": [
+        "0"
+      ],
+      "transport_zone_path": "/infra/sites/default/enforcement-points/default/transport-zones/7edfa14b-d5ab-41e4-ae02-2eefd94613e3",
+      "advanced_config": {
+        "hybrid": false,
+        "multicast": true,
+        "inter_router": false,
+        "local_egress": false,
+        "urpf_mode": "STRICT",
+        "connectivity": "ON"
+      },
+      "admin_state": "UP",
+      "replication_mode": "MTEP",
+      "resource_type": "Segment",
+      "id": "d53ffa36-3af9-44b9-865b-db17167710d7",
+      "display_name": "segment1",
+      "description": "Segment configured as Trunk, used for NSX Edge Nodes external connectivity",
+      "tags": [],
+      "path": "/infra/segments/d53ffa36-3af9-44b9-865b-db17167710d7",
+      "relative_path": "d53ffa36-3af9-44b9-865b-db17167710d7",
+      "parent_path": "/infra",
+      "unique_id": "11238320-3aa9-4c98-a297-fdda1d5db4a3",
+      "realization_id": "11238320-3aa9-4c98-a297-fdda1d5db4a3",
+      "marked_for_delete": false,
+      "overridden": false,
+      "_create_time": 1642968447377,
+      "_create_user": "admin",
+      "_last_modified_time": 1642968447377,
+      "_last_modified_user": "admin",
+      "_system_owned": false,
+      "_protection": "NOT_PROTECTED",
+      "_revision": 0
+    },
+    {
+      "type": "DISCONNECTED",
+      "vlan_ids": [
+        "0"
+      ],
+      "transport_zone_path": "/infra/sites/default/enforcement-points/default/transport-zones/ae663758-b518-4f3b-a6c1-8407a0750d40",
+      "advanced_config": {
+        "hybrid": false,
+        "multicast": true,
+        "inter_router": false,
+        "local_egress": false,
+        "urpf_mode": "STRICT",
+        "connectivity": "ON"
+      },
+      "admin_state": "UP",
+      "replication_mode": "MTEP",
+      "resource_type": "Segment",
+      "id": "uplink_tier0",
+      "display_name": "uplink_tier0",
+      "path": "/infra/segments/uplink_tier0",
+      "relative_path": "uplink_tier0",
+      "parent_path": "/infra",
+      "unique_id": "73694848-e871-4c47-8287-c3ae438700ff",
+      "realization_id": "73694848-e871-4c47-8287-c3ae438700ff",
+      "marked_for_delete": false,
+      "overridden": false,
+      "_create_time": 1645110442036,
+      "_create_user": "admin",
+      "_last_modified_time": 1645110442036,
+      "_last_modified_user": "admin",
+      "_system_owned": false,
+      "_protection": "NOT_PROTECTED",
+      "_revision": 0
+    },
+    {
+      "type": "DISCONNECTED",
+      "vlan_ids": [
+        "0-4092"
+      ],
+      "transport_zone_path": "/infra/sites/default/enforcement-points/default/transport-zones/7edfa14b-d5ab-41e4-ae02-2eefd94613e3",
+      "advanced_config": {
+        "hybrid": false,
+        "multicast": true,
+        "inter_router": false,
+        "local_egress": false,
+        "urpf_mode": "STRICT",
+        "connectivity": "ON"
+      },
+      "admin_state": "UP",
+      "replication_mode": "MTEP",
+      "resource_type": "Segment",
+      "id": "test",
+      "display_name": "test",
+      "path": "/infra/segments/test",
+      "relative_path": "test",
+      "parent_path": "/infra",
+      "unique_id": "f52e7dac-4e5c-48ba-a753-b4e0229cc6c4",
+      "realization_id": "f52e7dac-4e5c-48ba-a753-b4e0229cc6c4",
+      "marked_for_delete": false,
+      "overridden": false,
+      "_create_time": 1643046232640,
+      "_create_user": "admin",
+      "_last_modified_time": 1645111467641,
+      "_last_modified_user": "admin",
+      "_system_owned": false,
+      "_protection": "NOT_PROTECTED",
+      "_revision": 1
+    },
+    {
+      "type": "ROUTED",
+      "subnets": [
+        {
+          "gateway_address": "10.1.1.1/24",
+          "network": "10.1.1.0/24"
+        }
+      ],
+      "connectivity_path": "/infra/tier-1s/tier1",
+      "transport_zone_path": "/infra/sites/default/enforcement-points/default/transport-zones/9ae8dd04-f435-4e90-afb2-97715368ef23",
+      "advanced_config": {
+        "hybrid": false,
+        "multicast": true,
+        "inter_router": false,
+        "local_egress": false,
+        "urpf_mode": "STRICT",
+        "connectivity": "ON"
+      },
+      "admin_state": "UP",
+      "replication_mode": "MTEP",
+      "resource_type": "Segment",
+      "id": "segment1",
+      "display_name": "segment_vm",
+      "path": "/infra/segments/segment1",
+      "relative_path": "segment1",
+      "parent_path": "/infra",
+      "unique_id": "e31bd961-374d-4367-a699-e6b900693e3c",
+      "realization_id": "e31bd961-374d-4367-a699-e6b900693e3c",
+      "marked_for_delete": false,
+      "overridden": false,
+      "_create_time": 1645110919450,
+      "_create_user": "admin",
+      "_last_modified_time": 1645110989927,
+      "_last_modified_user": "admin",
+      "_system_owned": false,
+      "_protection": "NOT_PROTECTED",
+      "_revision": 1
+    }
+  ],
+  "result_count": 5,
+  "sort_by": "display_name",
+  "sort_ascending": true
+}

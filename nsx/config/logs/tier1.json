@@ -1,0 +1,36 @@
+{
+  "results" : [ {
+    "tier0_path" : "/infra/tier-0s/tier0",
+    "failover_mode" : "NON_PREEMPTIVE",
+    "enable_standby_relocation" : false,
+    "route_advertisement_types" : [ "TIER1_CONNECTED" ],
+    "force_whitelisting" : false,
+    "default_rule_logging" : false,
+    "disable_firewall" : false,
+    "ipv6_profile_paths" : [ "/infra/ipv6-ndra-profiles/default", "/infra/ipv6-dad-profiles/default" ],
+    "pool_allocation" : "ROUTING",
+    "advanced_config" : {
+      "traffic_back_to_source" : false
+    },
+    "resource_type" : "Tier1",
+    "id" : "tier1",
+    "display_name" : "tier1",
+    "path" : "/infra/tier-1s/tier1",
+    "relative_path" : "tier1",
+    "parent_path" : "/infra",
+    "unique_id" : "87d101b1-b250-4cbf-a60b-c2891e7c5d87",
+    "realization_id" : "87d101b1-b250-4cbf-a60b-c2891e7c5d87",
+    "marked_for_delete" : false,
+    "overridden" : false,
+    "_create_time" : 1645110874041,
+    "_create_user" : "admin",
+    "_last_modified_time" : 1645110955005,
+    "_last_modified_user" : "admin",
+    "_system_owned" : false,
+    "_protection" : "NOT_PROTECTED",
+    "_revision" : 1
+  } ],
+  "result_count" : 1,
+  "sort_by" : "display_name",
+  "sort_ascending" : true
+}

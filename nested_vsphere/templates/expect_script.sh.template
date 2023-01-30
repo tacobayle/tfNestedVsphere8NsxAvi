@@ -1,0 +1,32 @@
+#!/usr/bin/expect
+
+set timeout 60
+
+spawn ssh -oStrictHostKeyChecking=no ${vcenter_username}@${vcenter_sso_domain}:${vcenter_password}@${vcenter_fqdn}
+
+expect "assword:"
+send "${vcenter_password}\r"
+
+expect "and>"
+send "com.vmware.appliance.version1.access.shell.set --enabled true\r"
+expect "and> "
+send "shell \r"
+expect " ]$ "
+send "rvc ${vcenter_username}@${vcenter_sso_domain}:${vcenter_password}@${vcenter_fqdn} -a -q\r"
+expect "> "
+send "vsan.health.silent_health_check_configure -a controllerdriver ${vcenter_fqdn}/${vcenter_dc}/computers/${vcenter_cluster}\n"
+expect "> "
+send "vsan.health.silent_health_check_configure -a controllerdiskmode ${vcenter_fqdn}/${vcenter_dc}/computers/${vcenter_cluster}\n"
+expect "> "
+send "vsan.health.silent_health_check_configure -a controllerfirmware ${vcenter_fqdn}/${vcenter_dc}/computers/${vcenter_cluster}\n"
+expect "> "
+send "vsan.health.silent_health_check_configure -a controllerreleasesupport ${vcenter_fqdn}/${vcenter_dc}/computers/${vcenter_cluster}\n"
+expect "> "
+send "vsan.health.silent_health_check_configure -a controlleronhcl ${vcenter_fqdn}/${vcenter_dc}/computers/${vcenter_cluster}\n"
+expect "> "
+send "exit\n"
+expect " ]$ "
+send "exit\n"
+expect "and> "
+send "exit\n"
+interact
